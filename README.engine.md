@@ -1,3 +1,11 @@
+# Flare Vita
+
+Port of Flare RPG engine to PSVita.<br>
+The port is to be considered not stable. Save often since game can crash on random occasions.<br>
+Thanks to CatoTheYounger for extensively testing the port and providing screenshots for the release page.
+
+# Original Readme
+
 # Flare
 
 Flare (Free Libre Action Roleplaying Engine) is a simple game engine

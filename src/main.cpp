@@ -83,9 +83,7 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	 * PATH_DATA is for common game data (e.g. images, music)
 	 */
 	platform.setPaths();
-
 	Utils::lockFileCheck();
-
 	Utils::createLogFile();
 	Utils::logInfo(VersionInfo::createVersionStringFull().c_str());
 
@@ -341,12 +339,52 @@ void EmscriptenMainLoop() {
 }
 #endif
 
+#ifdef __vita__
+#include <vitasdk.h>
+#include <vitaGL.h>
+#include <taihen.h>
+extern "C" {
+int _newlib_heap_size_user = 256 * 1024 * 1024;
+ssize_t readlink(const char *pathname, char *buf, size_t bufsiz) {
+	strncpy(buf, "ux0:data/flare/flare.so", bufsiz - 1);
+	return strlen(buf);
+}
+};
+#endif
+
+#ifdef __vita__
+void *real_main(char *argv[]);
+
 int main(int argc, char *argv[]) {
+	pthread_t t;
+	pthread_attr_t attr;
+	pthread_attr_init(&attr);
+	pthread_attr_setstacksize(&attr, 0x400000);
+	pthread_create(&t, &attr, (void* (*)(void*))real_main, NULL);
+	pthread_join(t, NULL);
+}
+
+void *real_main(char *argv[]) {
+	scePowerSetArmClockFrequency(444);
+	scePowerSetBusClockFrequency(222);
+	scePowerSetGpuClockFrequency(222);
+	scePowerSetGpuXbarClockFrequency(166);
+	
+	sceIoMkdir("ux0:data/flare/saves", 0777);
+	vglInitExtended(0, 960, 544, 16 * 1024 * 1024, SCE_GXM_MULTISAMPLE_NONE);
+	int argc = 0;
+#else
+int main(int argc, char *argv[]) {
+#endif
 	settings = new Settings();
 
 	bool debug_event = false;
 	bool done = false;
 	CmdLineArgs cmd_line_args;
+
+#ifdef __vita__
+	settings->custom_path_data = std::string("ux0:data/flare/");
+#endif
 
 	for (int i = 1 ; i < argc; i++) {
 		std::string arg_full = std::string(argv[i]);
@@ -432,6 +470,7 @@ soft_reset:
 		platform.FSInit();
 		emscripten_set_main_loop(EmscriptenMainLoop, settings->max_frames_per_sec, 1);
 #else
+
 		init(cmd_line_args);
 
 		if (debug_event)

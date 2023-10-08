@@ -305,7 +305,11 @@ int SDLSoftwareRenderDevice::createContextInternal() {
 			Utils::logInfo("RenderDevice: Renderer driver is '%s'.", renderer_info.name);
 
 #if SDL_VERSION_ATLEAST(2, 0, 4)
+#ifdef __vita__
+			ddpi = 220;
+#else
 			SDL_GetDisplayDPI(0, &ddpi, 0, 0);
+#endif
 			Utils::logInfo("RenderDevice: Display DPI is %f", ddpi);
 #else
 			Utils::logError("RenderDevice: The SDL version used to compile Flare does not support SDL_GetDisplayDPI(). The virtual_dpi setting will be ignored.");

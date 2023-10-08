@@ -66,8 +66,13 @@ Settings::Settings()
 	config.resize(47);
 	setConfigDefault(0,  "move_type_dimissed",  &typeid(move_type_dimissed),  "0",            &move_type_dimissed,  "One time flag for initial movement type dialog | 0 = show dialog, 1 = no dialog");
 	setConfigDefault(1,  "fullscreen",          &typeid(fullscreen),          "0",            &fullscreen,          "Fullscreen mode | 0 = disable, 1 = enable");
+#ifdef __vita__
+	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "960",          &screen_w,            "Window size");
+	setConfigDefault(3,  "resolution_h",        &typeid(screen_h),            "544",          &screen_h,            "");
+#else
 	setConfigDefault(2,  "resolution_w",        &typeid(screen_w),            "640",          &screen_w,            "Window size");
 	setConfigDefault(3,  "resolution_h",        &typeid(screen_h),            "480",          &screen_h,            "");
+#endif
 	setConfigDefault(4,  "music_volume",        &typeid(music_volume),        "96",           &music_volume,        "Music and sound volume | 0 = silent, 128 = maximum");
 	setConfigDefault(5,  "sound_volume",        &typeid(sound_volume),        "128",          &sound_volume,        "");
 	setConfigDefault(6,  "combat_text",         &typeid(combat_text),         "1",            &combat_text,         "Display floating damage text | 0 = disable, 1 = enable");

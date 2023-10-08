@@ -1,0 +1,182 @@
+TOPDIR ?= $(CURDIR)
+
+APP_TITLE	:=	flare
+
+TARGET		:=	$(notdir $(CURDIR))
+BUILD		:=	build
+#~ SOURCES		:=	Libraries/Core/src/TinyXML/ \
+#~ 	Libraries/Core/src/
+
+SOURCEFILES	:=	./src/Animation.cpp \
+	./src/AnimationMedia.cpp \
+	./src/AnimationManager.cpp \
+	./src/AnimationSet.cpp \
+	./src/AStarContainer.cpp \
+	./src/AStarNode.cpp \
+	./src/Avatar.cpp \
+	./src/Camera.cpp \
+	./src/CampaignManager.cpp \
+	./src/CombatText.cpp \
+	./src/CursorManager.cpp \
+	./src/DeviceList.cpp \
+	./src/EffectManager.cpp \
+	./src/EnemyGroupManager.cpp \
+	./src/EngineSettings.cpp \
+	./src/Entity.cpp \
+	./src/EntityBehavior.cpp \
+	./src/EntityManager.cpp \
+	./src/EventManager.cpp \
+	./src/FileParser.cpp \
+	./src/FogOfWar.cpp \
+	./src/FontEngine.cpp \
+	./src/GameSlotPreview.cpp \
+	./src/GameState.cpp \
+	./src/GameStateConfig.cpp \
+	./src/GameStateCutscene.cpp \
+	./src/GameStateTitle.cpp \
+	./src/GameStateLoad.cpp \
+	./src/GameStatePlay.cpp \
+	./src/GameStateNew.cpp \
+	./src/GameSwitcher.cpp \
+	./src/GetText.cpp \
+	./src/Hazard.cpp \
+	./src/HazardManager.cpp \
+	./src/IconManager.cpp \
+	./src/InputState.cpp \
+	./src/ItemManager.cpp \
+	./src/ItemStorage.cpp \
+	./src/Loot.cpp \
+	./src/LootManager.cpp \
+	./src/Map.cpp \
+	./src/MapParallax.cpp \
+	./src/MapCollision.cpp \
+	./src/MapRenderer.cpp \
+	./src/Menu.cpp \
+	./src/MenuActionBar.cpp \
+	./src/MenuActiveEffects.cpp \
+	./src/MenuBook.cpp \
+	./src/MenuCharacter.cpp \
+	./src/MenuConfig.cpp \
+	./src/MenuConfirm.cpp \
+	./src/MenuDevConsole.cpp \
+	./src/MenuEnemy.cpp \
+	./src/MenuExit.cpp \
+	./src/MenuGameOver.cpp \
+	./src/MenuHUDLog.cpp \
+	./src/MenuInventory.cpp \
+	./src/MenuItemStorage.cpp \
+	./src/MenuLog.cpp \
+	./src/MenuManager.cpp \
+	./src/MenuMiniMap.cpp \
+	./src/MenuMovementType.cpp \
+	./src/MenuNumPicker.cpp \
+	./src/MenuPowers.cpp \
+	./src/MenuStash.cpp \
+	./src/MenuStatBar.cpp \
+	./src/MenuTalker.cpp \
+	./src/MenuTouchControls.cpp \
+	./src/MenuVendor.cpp \
+	./src/MessageEngine.cpp \
+	./src/ModManager.cpp \
+	./src/NPC.cpp \
+	./src/NPCManager.cpp \
+	./src/PowerManager.cpp \
+	./src/QuestLog.cpp \
+	./src/RenderDevice.cpp \
+	./src/SaveLoad.cpp \
+	./src/SDLInputState.cpp \
+	./src/SDLSoftwareRenderDevice.cpp \
+	./src/SDLSoundManager.cpp \
+	./src/SDLHardwareRenderDevice.cpp \
+	./src/SDLFontEngine.cpp \
+	./src/Settings.cpp \
+	./src/SharedGameResources.cpp \
+	./src/SharedResources.cpp \
+	./src/SoundManager.cpp \
+	./src/StatBlock.cpp \
+	./src/Stats.cpp \
+	./src/Subtitles.cpp \
+	./src/TileSet.cpp \
+	./src/TooltipData.cpp \
+	./src/TooltipManager.cpp \
+	./src/Utils.cpp \
+	./src/UtilsDebug.cpp \
+	./src/UtilsFileSystem.cpp \
+	./src/UtilsParsing.cpp \
+	./src/Version.cpp \
+	./src/Widget.cpp \
+	./src/WidgetCheckBox.cpp \
+	./src/WidgetButton.cpp \
+	./src/WidgetHorizontalList.cpp \
+	./src/WidgetInput.cpp \
+	./src/WidgetLabel.cpp \
+	./src/WidgetListBox.cpp \
+	./src/WidgetLog.cpp \
+	./src/WidgetScrollBar.cpp \
+	./src/WidgetScrollBox.cpp \
+	./src/WidgetSlider.cpp \
+	./src/WidgetSlot.cpp \
+	./src/WidgetTabControl.cpp \
+	./src/WidgetTooltip.cpp \
+	./src/XPScaling.cpp \
+	./src/PlatformLinux.cpp \
+	./src/main.cpp
+
+DATA		:=	data
+PREFIX  = arm-vita-eabi
+CC      = $(PREFIX)-gcc
+CXX      = $(PREFIX)-g++
+
+
+CFLAGS	:=	-g -Ofast -fno-strict-aliasing -fomit-frame-pointer -ffunction-sections -fno-lto \
+			-Wl,-q,--allow-multiple-definition \
+			$(DEFINES) -I$(VITASDK)/arm-vita-eabi/include/SDL2 -fno-optimize-sibling-calls
+CXXFLAGS	:= $(CFLAGS) -fno-exceptions -std=gnu++11
+
+ASFLAGS	:=	$(CFLAGS)
+
+LIBS	:= -lSDL2_Mixer -lSDL2_TTF -lSDL2_Image -lSDL2 -lvitaGL -lvitashark -lmathneon \
+	-lSceShaccCgExt -lSceShaccCg_stub -ltaihen_stub -lpng -ljpeg -lwebp -lfreetype -lmpg123 \
+	-lflac -lvorbisfile -lvorbis -logg -lmikmod -lScePower_stub -lSceAppUtil_stub \
+	-lpthread -lSceAudio_stub -lSceAudioIn_stub -lSceHid_stub -lz \
+	-lSceAppMgr_stub -lSceCommonDialog_stub -lSceCtrl_stub -lSceGxm_stub -lSceMotion_stub -lSceNet_stub \
+	-lSceTouch_stub -lSceSysmodule_stub -lSceKernelDmacMgr_stub -lSceDisplay_stub -lSceIme_stub
+
+export OUTPUT	:=	$(CURDIR)/$(TARGET)
+export TOPDIR	:=	$(CURDIR)
+
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
+			$(foreach sf,$(SOURCEFILES),$(CURDIR)/$(dir $(sf))) \
+			$(foreach dir,$(DATA),$(CURDIR)/$(dir))
+
+export DEPSDIR	:=	$(CURDIR)/$(BUILD)
+
+#~ CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c))) $(foreach f,$(SOURCEFILES),$(notdir $(f)))
+CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp))) $(foreach f,$(SOURCEFILES),$(notdir $(f)))
+SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+
+export OFILES_SRC	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export OFILES 	:= $(OFILES_SRC)
+
+all: $(APP_TITLE).vpk
+
+%.vpk: %.velf
+	vita-mksfoex -s TITLE_ID=FLARERPG1 -d ATTRIBUTE2=12 "Flare RPG" param.sfo
+	vita-pack-vpk -s param.sfo -b eboot.bin $@ \
+		-a livearea/icon0.png=sce_sys/icon0.png \
+		-a livearea/bg.png=sce_sys/livearea/contents/bg.png \
+		-a livearea/startup.png=sce_sys/livearea/contents/startup.png \
+		-a livearea/template.xml=sce_sys/livearea/contents/template.xml
+
+%.velf: %.elf
+	cp $< $<.unstripped.elf
+	$(PREFIX)-strip -g $<
+	vita-elf-create $< $@
+	vita-make-fself -c $@ eboot.bin
+
+$(APP_TITLE).elf: $(OFILES)
+	$(CXX) $(CXXFLAGS) $^ $(LIBS) -o $@
+
+clean:
+	@rm -rf $(APP_TITLE).velf $(APP_TITLE).elf $(APP_TITLE).vpk param.sfo eboot.bin $(OFILES)

@@ -40,7 +40,11 @@ Platform::Platform()
 	: has_exit_button(true)
 	, is_mobile_device(false)
 	, force_hardware_cursor(false)
+#ifdef __vita__
+	, has_lock_file(false)
+#else
 	, has_lock_file(true)
+#endif
 	, needs_alt_escape_key(false)
 	, fullscreen_bypass(false)
 	, config_menu_type(CONFIG_MENU_TYPE_DESKTOP)
@@ -57,7 +61,12 @@ Platform::~Platform() {
 }
 
 void Platform::setPaths() {
-
+#ifdef __vita__
+	settings->path_conf = std::string("ux0:data/flare/");
+	settings->path_user = std::string("ux0:data/flare/");
+	settings->path_data = std::string("ux0:data/flare/");
+	return;
+#endif
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 
