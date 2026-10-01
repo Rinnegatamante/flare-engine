@@ -135,9 +135,12 @@ CXXFLAGS	:= $(CFLAGS) -fno-exceptions -std=gnu++11
 
 ASFLAGS	:=	$(CFLAGS)
 
-LIBS	:= -lSDL2_Mixer -lSDL2_TTF -lSDL2_Image -lSDL2 -lvitaGL -lvitashark -lmathneon \
+PKG_CONFIG ?= arm-vita-eabi-pkg-config
+SDL_LIBS := $(shell $(PKG_CONFIG) --static --libs SDL2_mixer SDL2_ttf SDL2_image)
+
+LIBS	:= $(SDL_LIBS) -lSDL2_mixer -lSDL2_ttf -lSDL2_image -lSDL2 -lvitaGL -lvitashark -lmathneon \
 	-lSceShaccCgExt -lSceShaccCg_stub -ltaihen_stub -lpng -ljpeg -lwebp -lfreetype -lmpg123 \
-	-lflac -lvorbisfile -lvorbis -logg -lmikmod -lScePower_stub -lSceAppUtil_stub \
+	-lFLAC -lvorbisfile -lvorbis -logg -lmikmod -lScePower_stub -lSceAppUtil_stub \
 	-lpthread -lSceAudio_stub -lSceAudioIn_stub -lSceHid_stub -lz \
 	-lSceAppMgr_stub -lSceCommonDialog_stub -lSceCtrl_stub -lSceGxm_stub -lSceMotion_stub -lSceNet_stub \
 	-lSceTouch_stub -lSceSysmodule_stub -lSceKernelDmacMgr_stub -lSceDisplay_stub -lSceIme_stub
@@ -176,7 +179,7 @@ all: $(APP_TITLE).vpk
 	vita-make-fself -c $@ eboot.bin
 
 $(APP_TITLE).elf: $(OFILES)
-	$(CXX) $(CXXFLAGS) $^ $(LIBS) -o $@
+	$(CXX) $(CXXFLAGS) -pthread $^ $(LDFLAGS) $(LIBS) -o $@
 
 clean:
 	@rm -rf $(APP_TITLE).velf $(APP_TITLE).elf $(APP_TITLE).vpk param.sfo eboot.bin $(OFILES)
